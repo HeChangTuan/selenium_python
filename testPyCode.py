@@ -24,8 +24,7 @@ class PythonOrgSearch(unittest.TestCase):
         newBtn.click()
         driver.implicitly_wait(3)
         list = ['自1', '动2', '测3', '试4', '动5', '测6', '自7', '试8', '9', '动10', '自', '动', '测', '试'] 
-        slice = random.sample(list, 3)  #从list中随机获取5个元素，作为一个片断返回  
-        print slice
+        slice = random.sample(list, 3)  #从list中随机获取5个元素，作为一个片断返回 
         nameInput = driver.find_element_by_xpath("//html/body/div[1]/div/div[3]/div/div/div[2]/div/div/div[1]/div[1]/input")
         nameInput.send_keys(slice)
         phoneInput = driver.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div/div[2]/div/div/div[2]/div[1]/input")
@@ -41,17 +40,24 @@ class PythonOrgSearch(unittest.TestCase):
         genderRadio.click()
         saveBtn = driver.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div/div[1]/div[2]/span[2]/button")
         saveBtn.click()
-        driver.implicitly_wait(5)
-        elem = driver.find_element_by_xpath("//input[@type='text']")
-        print slice[0]
-        elem.send_keys(unicode(slice[0], errors='replace'), Keys.RETURN)
-        driver.implicitly_wait(2)
+        driver.implicitly_wait(10)
+        searchelem = driver.find_element_by_xpath("/html/body/div/div/div[3]/div/div/div[2]/div/input")
+        serachkey = slice[0] + slice[1] + slice[2]
+        print serachkey
+        searchelem.send_keys(unicode(serachkey, errors='replace'), Keys.RETURN)
+        driver.implicitly_wait(15)
         patientBtn = driver.find_element_by_xpath("/html/body/div/div/div[3]/div/div/div[3]/table/tr[2]/td[3]/a")
+        patientBtn.click()
         driver.implicitly_wait(5)
+        delBtn = driver.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div/div[1]/div[2]/span[4]/button")
+        delBtn.click()
+        driver.implicitly_wait(1)
+        confirmBtn = driver.find_element_by_xpath("/html/body/div[1]/div/div[3]/div/div/div[4]/div[2]/div[1]/div[2]/div/span[2]/button")
+        confirmBtn.click()
         # assert "No results found." not in driver.page_source
 
-    def tearDown(self):
-        print 'completed......'
+    # def tearDown(self):
+    #     print 'completed......'
         # self.driver.quit()
 
 if __name__ == "__main__":
