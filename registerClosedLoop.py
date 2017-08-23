@@ -8,6 +8,7 @@ import random
 import itertools
 import time
 from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,8 +16,13 @@ from selenium.webdriver.support import expected_conditions as EC
 class loginClosedLoop(unittest.TestCase):
 
     def setUp(self):
-        self.driver = webdriver.Chrome()
-
+        options = webdriver.ChromeOptions()
+        options.add_argument('Content-Type="application/json"')
+        options.add_argument('Authorization="pmJwtSecret"')
+        options.add_argument('user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 wechatdevtools/0.7.0 MicroMessenger/6.3.9 Language/zh_CN webview/0"')
+        # print options.getArgument()
+        self.driver = webdriver.Chrome(chrome_options=options)
+    
     def test_search_in_python_org(self):
         driver = self.driver
         list = ['Ke', '2l', '4A', 'O4', 'p5', 'm6', 's7K', 'eL8', 'f9', 'Iw0', 'xR', 'Ub', 'Tx', 'Yq'] 
@@ -30,16 +36,17 @@ class loginClosedLoop(unittest.TestCase):
         manuallyOpenId = 'ox_' + slice[0] + slice[1] + slice[2] + slice[3] + slice[4] + slice[5] + slice[6] + slice[7]
         openIdStr = """localStorage.setItem("openId", '""" + manuallyOpenId + """');"""
         getLocalStorage = """return localStorage.getItem("openId");"""
-        url = "http://localhost:3111/app/#/?comAppId=wxaacbcd85e20d5386&hospitalId=2c92be085b8a6b16015b8a80afc70004&state=789&appid=wx321d996e7d403afc&openId="+manuallyOpenId+"&nick_name="+nickStr+"&sex=1&image=http://wx.qlogo.cn/mmopen/DmTSLTdleeuBvVv92afjgmE86TYic9DE7TUu4XB8Hcq8j4n0Z8T7ay4mkll6sHnYiau9Ck7BjSia0XchyicSdnxsE6fymic6vnBEy/0"
+        url = "https://www.peoplesmedic.com/app/#/?comAppId=wxaacbcd85e20d5386&hospitalId=2c92be085b8a6b16015b8a80afc70004&state=789&appid=wx321d996e7d403afc&openId="+manuallyOpenId+"&nick_name="+nickStr+"&sex=1&image=http://wx.qlogo.cn/mmopen/DmTSLTdleeuBvVv92afjgmE86TYic9DE7TUu4XB8Hcq8j4n0Z8T7ay4mkll6sHnYiau9Ck7BjSia0XchyicSdnxsE6fymic6vnBEy/0"
+        # url = "http://localhost:3111/app/#/?comAppId=wxaacbcd85e20d5386&hospitalId=2c92be085b8a6b16015b8a80afc70004&state=789&appid=wx321d996e7d403afc&openId="+manuallyOpenId+"&nick_name="+nickStr+"&sex=1&image=http://wx.qlogo.cn/mmopen/DmTSLTdleeuBvVv92afjgmE86TYic9DE7TUu4XB8Hcq8j4n0Z8T7ay4mkll6sHnYiau9Ck7BjSia0XchyicSdnxsE6fymic6vnBEy/0"
         driver.get(url)
         driver.execute_script(openIdStr)
-        driver.implicitly_wait(5)
+        time.sleep(5)
         # driver.refresh()
         driver.get(url)
         # checkLocalStorage = driver.execute_script(getLocalStorage)
         # print driver.current_url
         # print checkLocalStorage
-        time.sleep(3)
+        time.sleep(30)
         checkTeam = driver.find_element_by_xpath("/html/body/div[2]/div/div/section/article/div/div[2]/div[3]/button").click()
         driver.implicitly_wait(5)
         choiceTeam = driver.find_element_by_xpath("/html/body/div[2]/div/div/section/article/div/div/ul/li[3]").click()
