@@ -10,7 +10,6 @@ import ConfigParser
 cf = ConfigParser.ConfigParser()
 cf.read("config.conf")
 commons = cf.options("common")
-print 'options:', commons
 # addPatien = python addPatient.python 新增病人
 # addServiceOrder = python addServiceOrder.py 预约
 # register = python registerClosedLoop.py 注册
