@@ -22,4 +22,5 @@ print 'options:', commons
 # initiateChatAccount = python initiateChat\(account\).py 发起会话 (首页账号进入版)
 # initiateChatDoctor = python initiateChat\(doctor\).py 发起会话 (联系医生进入版)
 for common in commons:
-  os.system(cf.get("common", common))
+  runcommon = 'python ' + cf.get("common", common)
+  os.system(runcommon)
