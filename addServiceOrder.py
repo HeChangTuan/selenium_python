@@ -12,14 +12,17 @@ from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import ConfigParser
 
-class loginClosedLoop(unittest.TestCase):
+cf = ConfigParser.ConfigParser()
+cf.read("config.conf")
+class addServiceOrder(unittest.TestCase):
 
     def setUp(self):
         options = webdriver.ChromeOptions()
-        options.add_argument('Content-Type="application/json"')
-        options.add_argument('Authorization="pmJwtSecret"')
-        options.add_argument('user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 wechatdevtools/0.7.0 MicroMessenger/6.3.9 Language/zh_CN webview/0"')
+        options.add_argument(cf.get("browserOptions", "ContentType"))
+        options.add_argument(cf.get("browserOptions", "Authorization"))
+        options.add_argument(cf.get("browserOptions", "UserAgent"))
         # print options.getArgument()
         self.driver = webdriver.Chrome(chrome_options=options)
     
@@ -30,15 +33,15 @@ class loginClosedLoop(unittest.TestCase):
         nickList = ['自1', '动2', '测3', '试4', '动5', '测6', '自7', '试8', '9', '动10', '自', '动', '测', '试']
         nickSlice = random.sample(nickList, 3)
         nickStr = nickSlice[2] + nickSlice[1] + nickSlice[0]
-        manuallyOpenId = 'ox_KOxBN7ptz9X0KIwnsIEjJkfjc'
+        manuallyOpenId = cf.get("wx", "manuallyOpenId")
         openIdStr = """localStorage.setItem("openId", '""" + manuallyOpenId + """');"""
         getLocalStorage = """return localStorage.getItem("openId");"""
-        teamNum = '4' #修改为需要测试的团队序列号,从左至右,由1开始
-        serviceName = '测试服务2' #修改为需要测试的服务名
-        orderVar = 'afternoon' #需要预约时段 morning or afternoon 
-        timeVar = '12:00 - 12:30' #需要的具体时间段
-        dateStr = '25' #需要选择的日期
-        patientName = '自测动' #需要测试预约的就诊人
+        teamNum = cf.get("team", "num") #修改为需要测试的团队序列号,从左至右,由1开始
+        serviceName = cf.get("service", "name") #修改为需要测试的服务名
+        orderVar = cf.get("order", "orderVar") #需要预约时段 morning or afternoon 
+        timeVar = cf.get("order", "timeVar") #需要的具体时间段
+        dateStr = cf.get("order", "date") #需要选择的日期
+        patientName = cf.get("patient", "name") #需要测试预约的就诊人
         url = "https://www.peoplesmedic.com/app/#/?comAppId=wxaacbcd85e20d5386&hospitalId=2c92be085b8a6b16015b8a80afc70004&state=789&appid=wx321d996e7d403afc&openId="+manuallyOpenId+"&nick_name="+nickStr+"&sex=1&image=http://wx.qlogo.cn/mmopen/DmTSLTdleeuBvVv92afjgmE86TYic9DE7TUu4XB8Hcq8j4n0Z8T7ay4mkll6sHnYiau9Ck7BjSia0XchyicSdnxsE6fymic6vnBEy/0"
         # url = "http://localhost:3111/app/#/?comAppId=wxaacbcd85e20d5386&hospitalId=2c92be085b8a6b16015b8a80afc70004&state=789&appid=wx321d996e7d403afc&openId="+manuallyOpenId+"&nick_name="+nickStr+"&sex=1&image=http://wx.qlogo.cn/mmopen/DmTSLTdleeuBvVv92afjgmE86TYic9DE7TUu4XB8Hcq8j4n0Z8T7ay4mkll6sHnYiau9Ck7BjSia0XchyicSdnxsE6fymic6vnBEy/0"
         driver.get(url)

@@ -12,14 +12,17 @@ from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import ConfigParser
 
-class loginClosedLoop(unittest.TestCase):
+cf = ConfigParser.ConfigParser()
+cf.read("config.conf")
+class registerClosedLoop(unittest.TestCase):
 
     def setUp(self):
         options = webdriver.ChromeOptions()
-        options.add_argument('Content-Type="application/json"')
-        options.add_argument('Authorization="pmJwtSecret"')
-        options.add_argument('user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 wechatdevtools/0.7.0 MicroMessenger/6.3.9 Language/zh_CN webview/0"')
+        options.add_argument(cf.get("browserOptions", "ContentType"))
+        options.add_argument(cf.get("browserOptions", "Authorization"))
+        options.add_argument(cf.get("browserOptions", "UserAgent"))
         # print options.getArgument()
         self.driver = webdriver.Chrome(chrome_options=options)
     

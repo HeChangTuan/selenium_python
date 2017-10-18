@@ -12,15 +12,17 @@ from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import ConfigParser
 
-class loginClosedLoop(unittest.TestCase):
+cf = ConfigParser.ConfigParser()
+cf.read("config.conf")
+class delServiceOrder(unittest.TestCase):
 
     def setUp(self):
         options = webdriver.ChromeOptions()
-        options.add_argument('Content-Type="application/json"')
-        options.add_argument('Authorization="pmJwtSecret"')
-        options.add_argument('user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 wechatdevtools/0.7.0 MicroMessenger/6.3.9 Language/zh_CN webview/0"')
-        # print options.getArgument()
+        options.add_argument(cf.get("browserOptions", "ContentType"))
+        options.add_argument(cf.get("browserOptions", "Authorization"))
+        options.add_argument(cf.get("browserOptions", "UserAgent"))
         self.driver = webdriver.Chrome(chrome_options=options)
     
     def test_search_in_python_org(self):
@@ -30,10 +32,10 @@ class loginClosedLoop(unittest.TestCase):
         nickList = ['自1', '动2', '测3', '试4', '动5', '测6', '自7', '试8', '9', '动10', '自', '动', '测', '试']
         nickSlice = random.sample(nickList, 3)
         nickStr = nickSlice[2] + nickSlice[1] + nickSlice[0]
-        manuallyOpenId = 'ox_KOxBN7ptz9X0KIwnsIEjJkfjc'
+        manuallyOpenId = cf.get("wx", "manuallyOpenId")
         openIdStr = """localStorage.setItem("openId", '""" + manuallyOpenId + """');"""
         getLocalStorage = """return localStorage.getItem("openId");"""
-        patientNum = '7' #修改为需要测试的就诊人,从左至右,由1开始
+        patientNum = cf.get("patient", "num") #修改为需要测试的就诊人,从左至右,由1开始
         url = "https://www.peoplesmedic.com/app/#/?comAppId=wxaacbcd85e20d5386&hospitalId=2c92be085b8a6b16015b8a80afc70004&state=789&appid=wx321d996e7d403afc&openId="+manuallyOpenId+"&nick_name="+nickStr+"&sex=1&image=http://wx.qlogo.cn/mmopen/DmTSLTdleeuBvVv92afjgmE86TYic9DE7TUu4XB8Hcq8j4n0Z8T7ay4mkll6sHnYiau9Ck7BjSia0XchyicSdnxsE6fymic6vnBEy/0"
         # url = "http://localhost:3111/app/#/?comAppId=wxaacbcd85e20d5386&hospitalId=2c92be085b8a6b16015b8a80afc70004&state=789&appid=wx321d996e7d403afc&openId="+manuallyOpenId+"&nick_name="+nickStr+"&sex=1&image=http://wx.qlogo.cn/mmopen/DmTSLTdleeuBvVv92afjgmE86TYic9DE7TUu4XB8Hcq8j4n0Z8T7ay4mkll6sHnYiau9Ck7BjSia0XchyicSdnxsE6fymic6vnBEy/0"
         driver.get(url)
